@@ -12,13 +12,13 @@ namespace subreddit.Test {
             CommentTree head = new() { Root = _Create("1") };
             CommentTree c1a = new() { Root = _Create("2") };
             CommentTree c1b = new() { Root = _Create("3") };
-            head.Children.Add(c1a);
-            head.Children.Add(c1b);
+            head.AddChild(c1a);
+            head.AddChild(c1b);
 
             CommentTree c2a = new() { Root = _Create("4") };
             CommentTree c2b = new() { Root = _Create("5") };
-            c1a.Children.Add(c2a);
-            c1a.Children.Add(c2b);
+            c1a.AddChild(c2a);
+            c1a.AddChild(c2b);
 
             CommentTree? five = head.GetChild("5");
             Assert.IsNotNull(five);
@@ -34,13 +34,13 @@ namespace subreddit.Test {
             CommentTree head = new() { Root = _Create("1") };
             CommentTree c1a = new() { Root = _Create("2") };
             CommentTree c1b = new() { Root = _Create("3") };
-            head.Children.Add(c1a);
-            head.Children.Add(c1b);
+            head.AddChild(c1a);
+            head.AddChild(c1b);
 
             CommentTree c2a = new() { Root = _Create("4") };
             CommentTree c2b = new() { Root = _Create("5") };
-            c1a.Children.Add(c2a);
-            c1a.Children.Add(c2b);
+            c1a.AddChild(c2a);
+            c1a.AddChild(c2b);
 
             List<ViewComment> list = head.GetList();
 

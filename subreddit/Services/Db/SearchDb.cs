@@ -50,14 +50,14 @@ namespace subreddit.Services.Db {
                 WHERE (
                     {1}
                 )
-                LIMIT 500;
+                LIMIT 1000;
             ");
 
-            string submissionSearch = string.Join(" OR ", terms.Select((iter, i) => {
+            string submissionSearch = string.Join(" AND ", terms.Select((iter, i) => {
                 return $" (lower(content) LIKE '%' || @Term{i} || '%') OR (lower(title) LIKE '%' || @Term{i} || '%') ";
             }));
 
-            string commentSearch = string.Join(" OR ", terms.Select((iter, i) => {
+            string commentSearch = string.Join(" AND ", terms.Select((iter, i) => {
                 return $" (lower(c.content) LIKE '%' || @Term{i} || '%') ";
             }));
 

@@ -4,7 +4,14 @@
 
         public ViewComment Root { get; set; } = new();
 
-        public List<CommentTree> Children { get; set; } = new();
+        private List<CommentTree> Children { get; set; } = new();
+
+        public void AddChild(CommentTree tree) {
+            this.Children.Add(tree);
+            this.Children.Sort((a, b) => {
+                return a.Root.Comment.PostedAt.CompareTo(b.Root.Comment.PostedAt);
+            });
+        }
 
         /// <summary>
         ///     Get a node within a tree
@@ -35,9 +42,6 @@
 
             foreach (CommentTree child in Children) {
                 List<ViewComment> childList = child.GetList();
-                childList.Sort((a, b) => {
-                    return a.Comment.PostedAt.CompareTo(b.Comment.PostedAt);
-                });
                 tree.AddRange(childList);
             }
 

@@ -83,7 +83,7 @@ namespace subreddit.Controllers {
                     // t1_ means a comment
                     if (v.Comment.ParentID.StartsWith("t3_")) {
                         v.Depth = 0;
-                        head.Children.Add(new CommentTree() {
+                        head.AddChild(new CommentTree() {
                             Root = v
                         });
                     } else if (v.Comment.ParentID.StartsWith("t1_")) {
@@ -99,7 +99,7 @@ namespace subreddit.Controllers {
                             continue;
                         }
 
-                        parentNode.Children.Add(new CommentTree() {
+                        parentNode.AddChild(new CommentTree() {
                             Root = v
                         });
 
