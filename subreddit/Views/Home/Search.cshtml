@@ -27,7 +27,12 @@
                     @result.PostedAt.ToString("u")
                     UTC
                 </strong>
-                <span> / posted by</span>
+                @if (result.Type == "post") {
+                    <span> / posted by</span>
+                } else {
+                    <span> / comment by</span>
+                }
+
                 <strong>
                     @result.Author
                 </strong>

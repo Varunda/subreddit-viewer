@@ -54,7 +54,7 @@ namespace subreddit.Services.Db {
             ");
 
             string submissionSearch = string.Join(" AND ", terms.Select((iter, i) => {
-                return $" (lower(content) LIKE '%' || @Term{i} || '%') OR (lower(title) LIKE '%' || @Term{i} || '%') ";
+                return $" ( (lower(content) LIKE '%' || @Term{i} || '%') OR (lower(title) LIKE '%' || @Term{i} || '%') ) ";
             }));
 
             string commentSearch = string.Join(" AND ", terms.Select((iter, i) => {
