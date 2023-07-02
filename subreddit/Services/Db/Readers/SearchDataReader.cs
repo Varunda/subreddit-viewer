@@ -11,14 +11,14 @@ namespace subreddit.Services.Db {
             r.Type = reader.GetString("type");
 
             if (r.Type == "comment") {
-                r.PostID = reader.GetString("post_id").Substring(2);
+                // t3_1gxupn => 1gxupn
+                r.PostID = reader.GetString("post_id")[3..];
             } else if (r.Type == "post") {
                 r.PostID = reader.GetString("post_id");
             } else {
                 throw new Exception($"unhandled type '{r.Type}'");
             }
 
-            r.ID = reader.GetString("id");
             r.Title = reader.GetString("title");
             r.Content = reader.GetString("content");
             r.PostedAt = reader.GetDateTime("posted_at");

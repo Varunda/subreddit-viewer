@@ -20,7 +20,17 @@ namespace subreddit.Services.Db {
         }
 
         public async Task<List<SearchResult>> Search(string str, CancellationToken cancel) {
-            string[] terms = str.Replace(",", "").Replace(".", "").Replace("'", "").ToLower().Split(" ");
+            string[] terms = str.Replace(",", "").Replace(".", "").Replace("'", "").ToLower().Split(" ").Where(iter => iter.Length > 1).ToArray();
+
+            _Logger.LogInformation($"Searching for {terms.Length} terms: [{string.Join(", ", terms)}]");
+
+            if (terms.Length == 0) {
+                return new List<SearchResult>();
+            }
+
+            if (terms.Length > 50) {
+                throw new Exception($"Too many search terms, max 50, had {terms.Length}");
+            }
 
             using NpgsqlConnection conn = _DbHelper.Connection();
             using NpgsqlCommand cmd = await _DbHelper.Command(conn, @"
@@ -33,13 +43,14 @@ namespace subreddit.Services.Db {
                 )
                 UNION ALL
                 SELECT
-                    c.link_id AS post_id, c.id, s.title, s.posted_at, c.content, 'comment' AS type, c.author
+                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author
                 FROM
                     comments c
                     LEFT JOIN submissions s ON ('t3_' || s.id) = c.link_id
                 WHERE (
                     {1}
-                );
+                )
+                LIMIT 500;
             ");
 
             string submissionSearch = string.Join(" OR ", terms.Select((iter, i) => {

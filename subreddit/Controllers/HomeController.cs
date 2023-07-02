@@ -25,20 +25,25 @@ namespace subreddit.Controllers {
             return View();
         }
 
-        public async Task<IActionResult> Search(string? q) {
-            if (q == null) {
-                ViewBag.Results = null;
-            } else {
-                _Logger.LogInformation($"searching for {q}");
+        public async Task<IActionResult> Search(string q) {
+            if (string.IsNullOrEmpty(q)) {
+                return BadRequest("missing query");
+            }
+
+            _Logger.LogInformation($"searching for '{q}'");
+            try {
                 List<SearchResult> results = await _SearchDb.Search(q, CancellationToken.None);
 
                 ViewBag.MetaTitle = $"/r/planetside2 search: {q}";
                 ViewBag.MetaDescription = $"Found {results.Count} for {q}";
 
                 ViewBag.Results = results;
-            }
 
-            return View();
+                return View();
+            } catch (Exception ex) {
+                _Logger.LogError(ex, $"exception in query for '{q}'");
+                return StatusCode(500, $"Exception while querying '{q}': {ex.Message}");
+            }
         }
 
         public async Task<IActionResult> Post(string id) {
