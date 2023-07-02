@@ -12,6 +12,8 @@
 
         public string Content { get; set; } = "";
 
+        public int Score { get; set; }
+
         public string Data { get; set; } = "";
 
     }

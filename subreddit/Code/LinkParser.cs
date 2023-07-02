@@ -2,6 +2,11 @@
 
     public class LinkParser {
 
+        /// <summary>
+        ///     Given a URL get the ID of the post 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public static string? GetPostID(string url) {
             string[] parts = url.Split("/");
 

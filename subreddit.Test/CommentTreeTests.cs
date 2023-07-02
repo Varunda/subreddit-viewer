@@ -20,6 +20,13 @@ namespace subreddit.Test {
             c1a.AddChild(c2a);
             c1a.AddChild(c2b);
 
+            CommentTree c3a = new() { Root = _Create("6") };
+            CommentTree c3b = new() { Root = _Create("7") };
+            CommentTree c3c = new() { Root = _Create("8") };
+            c1b.AddChild(c3a);
+            c1b.AddChild(c3b);
+            c1b.AddChild(c3c);
+
             CommentTree? five = head.GetChild("5");
             Assert.IsNotNull(five);
             Assert.IsTrue(five.Root.Comment.ID == "5");
@@ -27,6 +34,10 @@ namespace subreddit.Test {
             CommentTree? three = head.GetChild("3");
             Assert.IsNotNull(three);
             Assert.AreEqual(three.Root.Comment.ID, "3");
+
+            CommentTree? six = head.GetChild("6");
+            Assert.IsNotNull(six);
+            Assert.AreEqual(six.Root.Comment.ID, "6");
         }
 
         [TestMethod]

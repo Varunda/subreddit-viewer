@@ -20,7 +20,7 @@
 
     <div>
         <h2>Search</h2>
-        <form asp-controller="Home" asp-action="Search">
+        <form asp-controller="Home" asp-action="Search" method="get">
             <input class="form-control" name="q" type="text" placeholder="Search for posts, limited to 1k results" />
             <input type="submit" class="form-control btn btn-primary" value="Search" />
         </form>

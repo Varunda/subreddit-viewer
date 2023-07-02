@@ -15,6 +15,7 @@ namespace subreddit.Services.Db.Readers {
             c.PostedAt = reader.GetDateTime("posted_at");
             c.Author = reader.GetString("author");
             c.Content = reader.GetString("content");
+            c.Score = reader.GetInt32("score");
 
             return c;
         }

@@ -6,6 +6,20 @@
 
         private List<CommentTree> Children { get; set; } = new();
 
+        public List<CommentTree> GetChildren() {
+            return Children;
+        }
+
+        public int Count() {
+            int count = 1;
+
+            foreach (CommentTree tree in Children) {
+                count += tree.Count();
+            }
+
+            return count;
+        }
+
         public void AddChild(CommentTree tree) {
             this.Children.Add(tree);
             this.Children.Sort((a, b) => {

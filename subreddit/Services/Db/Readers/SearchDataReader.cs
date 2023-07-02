@@ -23,6 +23,7 @@ namespace subreddit.Services.Db {
             r.Content = reader.GetString("content");
             r.PostedAt = reader.GetDateTime("posted_at");
             r.Author = reader.GetString("author");
+            r.Score = reader.GetInt32("score");
 
             return r;
         }

@@ -19,10 +19,18 @@ namespace subreddit.Services.Db {
             _Reader = reader;
         }
 
+        /// <summary>
+        ///     Get a specific post from the DB
+        /// </summary>
+        /// <param name="ID">ID of the post to get. Do not include a leading t1_</param>
+        /// <returns>
+        ///     The <see cref="RedditPost"/> with <see cref="RedditPost.ID"/> of <paramref name="ID"/>,
+        ///     or <c>null</c> if it does not exists
+        /// </returns>
         public async Task<RedditPost?> GetByID(string ID) {
             using NpgsqlConnection conn = _DbHelper.Connection();
             using NpgsqlCommand cmd = await _DbHelper.Command(conn, @"
-                SELECT *
+                SELECT *, CAST(data->>'score' AS INT) as score
                     FROM submissions
                     WHERE id = @ID;
             ");

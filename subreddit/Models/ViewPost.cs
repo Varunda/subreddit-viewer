@@ -4,7 +4,7 @@
 
         public RedditPost Post { get; set; } = new();
 
-        public List<ViewComment> Comments { get; set; } = new();
+        public CommentTree Comments { get; set; } = new();
 
     }
 

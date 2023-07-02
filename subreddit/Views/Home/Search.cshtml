@@ -1,22 +1,32 @@
 ﻿@using subreddit.Models
 
+@model ViewSearchResults
+
 <div class="text-center">
     <h1 class="display-4">Search</h1>
 </div>
 
-<form asp-controller="Home" asp-action="Search" class="mb-2">
-    <input class="form-control" name="q" type="text" />
+<form asp-controller="Home" asp-action="Search" method="get" class="mb-2">
+    <input class="form-control" name="q" type="text" placeholder="Search for posts, limited to 1k results" value="@Model.Query" />
     <input type="submit" class="form-control btn btn-primary" value="Search" />
 </form>
 
-<div class="border-bottom">
-    Found @ViewBag.Results.Count results
+<div class="border-bottom mb-2">
+    Found @Model.Results.Count
+    @if (Model.Results.Count == 1000) {
+        <span>+ more</span>
+    }
+    results for
+    <code>
+        @Model.Query
+    </code>
 </div>
 
-@foreach (SearchResult result in ViewBag.Results) {
+@foreach (SearchResult result in Model.Results) {
     <div class="border-bottom mb-2">
         <div class="mb-0">
             <h4 class="d-inline-block mb-0">
+                @result.Score - 
                 <a asp-controller="Home" asp-action="post" asp-route-id="@result.PostID">
                     @result.Title
                 </a>
@@ -52,5 +62,11 @@
             </span>
         }
     </div>
+}
+
+@if (Model.Results.Count == 1000) {
+    <a class="btn btn-primary" asp-controller="Home" asp-action="Search" asp-route-q=@Model.Query asp-route-o=@(Model.Offset + 1000)> 
+        Next page
+    </a>
 }
 

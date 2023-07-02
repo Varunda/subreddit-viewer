@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using subreddit.Code;
 using subreddit.Models;
 using subreddit.Services.Db;
 
@@ -25,21 +26,34 @@ namespace subreddit.Controllers {
             return View();
         }
 
-        public async Task<IActionResult> Search(string q) {
+        /// <summary>
+        ///     Search posts for keywords
+        /// </summary>
+        /// <param name="q">Keywords to search by</param>
+        /// <param name="o">Offset into the results to search</param>
+        /// <returns></returns>
+        public async Task<IActionResult> Search([FromQuery] string q, [FromQuery] int o = 0) {
             if (string.IsNullOrEmpty(q)) {
                 return BadRequest("missing query");
             }
 
+            if (o < 0) {
+                return BadRequest("cannot have a negative offset");
+            }
+
             _Logger.LogInformation($"searching for '{q}'");
             try {
-                List<SearchResult> results = await _SearchDb.Search(q, CancellationToken.None);
+                List<string> terms = QueryParser.Parse(q);
 
-                ViewBag.MetaTitle = $"/r/planetside2 search: {q}";
-                ViewBag.MetaDescription = $"Found {results.Count} for {q}";
+                List<SearchResult> results = await _SearchDb.Search(terms, o, CancellationToken.None);
 
-                ViewBag.Results = results;
+                ViewSearchResults model = new();
+                model.Query = q;
+                model.Terms = terms;
+                model.Results = results;
+                model.Offset = o;
 
-                return View();
+                return View(model);
             } catch (Exception ex) {
                 _Logger.LogError(ex, $"exception in query for '{q}'");
                 return StatusCode(500, $"Exception while querying '{q}': {ex.Message}");
@@ -93,18 +107,18 @@ namespace subreddit.Controllers {
                             continue;
                         }
 
-                        CommentTree? parentNode = head.GetChild(parentID);
-                        if (parentNode == null) {
-                            _Logger.LogError($"missing comment tree node {parentID} while loading post {id}");
-                            continue;
-                        }
-
-                        parentNode.AddChild(new CommentTree() {
-                            Root = v
-                        });
-
                         if (parent.Depth != -1) {
                             v.Depth = parent.Depth + 1;
+
+                            CommentTree? parentNode = head.GetChild(parentID);
+                            if (parentNode == null) {
+                                _Logger.LogError($"missing comment tree node {parentID} while loading post {id}");
+                                continue;
+                            }
+
+                            parentNode.AddChild(new CommentTree() {
+                                Root = v
+                            });
                         }
                     }
                 }
@@ -118,7 +132,7 @@ namespace subreddit.Controllers {
 
             ViewPost model = new();
             model.Post = post;
-            model.Comments = list.Skip(1).ToList();
+            model.Comments = head;
 
             return View(model);
         }

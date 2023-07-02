@@ -1,8 +1,14 @@
+using subreddit.Code;
 using subreddit.Models;
 using subreddit.Services.Db;
 using subreddit.Services.Db.Readers;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(options => options.FormatterName = "ALogger")
+    .AddConsoleFormatter<ALogger, ALoggerFormatterOptions>(options => {
+
+    });
 
 // Add services to the container.
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();

@@ -12,6 +12,8 @@
 </div>
 
 <h1>
+    @Model.Post.Score 
+    -
     @Model.Post.Title
 </h1>
 <h5>
@@ -34,32 +36,11 @@
 
 <h3>
     Comments
-    (@Model.Comments.Count)
+    (@(Model.Comments.Count() - 1)) @* minus one to ignore the root node which contains nothing *@
 </h3>
 
-@foreach (ViewComment comment in Model.Comments) {
-    <div>
-        <div style="padding-left: @(comment.Depth)rem;">
-            <strong>
-                @comment.Comment.Author
-                @if (comment.Comment.Author == Model.Post.Author) {
-                    <small style="background-color: red; border-radius: 5px; padding-left: 0.25rem; padding-right: 0.25rem;">OP</small>
-                }
-            </strong>
-            <span>
-                -
-            </span>
-            <span>
-                @comment.Comment.PostedAt.ToString("u")
-                UTC
-            </span>
-
-            <br/>
-
-
-            <span style="white-space: pre-line">@comment.Comment.Content</span>
-        </div>
-    </div>
-}
-    
+@* don't use the root node, as it contains nothing, instead render each child *@
+@foreach (CommentTree tree in Model.Comments.GetChildren()) {
+    <partial name="_Comment" model=tree />
+}
 
