@@ -1,0 +1,46 @@
+﻿@using subreddit.Models
+@model ViewPost
+
+<meta title="og:title" content="@Model.Post.Title" />
+
+<div class="text-center">
+    <h1 class="display-4">Viewing post</h1>
+</div>
+
+<h1>
+    @Model.Post.Title
+</h1>
+
+@Model.Comments.Count
+<span>
+    comments
+</span>
+
+<hr class="border" />
+
+<h3>
+    Comments
+</h3>
+
+@foreach (ViewComment comment in Model.Comments) {
+    <div>
+        <div style="padding-left: @(comment.Depth)rem;">
+            <strong>
+                @comment.Comment.Author
+            </strong>
+            <span>
+                -
+            </span>
+            <span>
+                @comment.Comment.PostedAt.ToString("u")
+                UTC
+            </span>
+
+            <br/>
+
+            @comment.Comment.Content
+        </div>
+    </div>
+}
+    
+

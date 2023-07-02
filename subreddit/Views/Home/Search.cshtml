@@ -1,0 +1,55 @@
+﻿@using subreddit.Models
+
+<div class="text-center">
+    <h1 class="display-4">Search</h1>
+</div>
+
+@if (ViewBag.Results == null) {
+    <div>
+        <form asp-controller="Home" asp-action="Search">
+            <input class="form-control" name="q" type="text" />
+            <input type="submit" class="form-control" />
+        </form>
+    </div>
+} else {
+    <div class="border-bottom">
+        Found @ViewBag.Results.Count results
+    </div>
+
+    foreach (SearchResult result in ViewBag.Results) {
+        <div class="border-bottom mb-2">
+            <div class="mb-0">
+                <h4 class="d-inline-block mb-0">
+                    <a asp-controller="Home" asp-action="post" asp-route-id="@result.PostID">
+                        @result.Title
+                    </a>
+                </h4>
+                <h6 class="d-inline-block mb-0">
+                    <span>at</span>
+                    <strong>
+                        @result.PostedAt.ToString("u")
+                        UTC
+                    </strong>
+                    <span> / posted by</span>
+                    <strong>
+                        @result.Author
+                    </strong>
+                </h6>
+            </div>
+            <br/>
+            @if (result.Content.Length > 300) {
+                <span>
+                    @result.Content.Substring(0, 300)
+                </span>
+                <span>
+                    ...
+                </span>
+            } else {
+                <span>
+                    @result.Content
+                </span>
+            }
+        </div>
+    }
+}
+
