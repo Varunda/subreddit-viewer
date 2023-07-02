@@ -1,7 +1,11 @@
 ﻿@using subreddit.Models
 @model ViewPost
 
-<meta title="og:title" content="@Model.Post.Title" />
+@section metatags {
+    <meta property="og:title" content="@Model.Post.Title" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="@Model.Post.Content.Substring(0, Math.Min(Model.Post.Content.Length, 100))" />
+}
 
 <div class="text-center">
     <h1 class="display-4">Viewing post</h1>
@@ -10,18 +14,27 @@
 <h1>
     @Model.Post.Title
 </h1>
+<h5>
+    by
+    <strong>
+        @Model.Post.Author
+    </strong>
 
-@Model.Post.Content
+    at
 
-@Model.Comments.Count
-<span>
-    comments
-</span>
+    <strong>
+        @Model.Post.PostedAt.ToString("u")
+        UTC
+    </strong>
+</h5>
+
+<span style="white-space: pre-line">@Model.Post.Content</span>
 
 <hr class="border" />
 
 <h3>
     Comments
+    (@Model.Comments.Count)
 </h3>
 
 @foreach (ViewComment comment in Model.Comments) {
@@ -29,6 +42,9 @@
         <div style="padding-left: @(comment.Depth)rem;">
             <strong>
                 @comment.Comment.Author
+                @if (comment.Comment.Author == Model.Post.Author) {
+                    <small style="background-color: red; border-radius: 5px; padding-left: 0.25rem; padding-right: 0.25rem;">OP</small>
+                }
             </strong>
             <span>
                 -
@@ -40,7 +56,8 @@
 
             <br/>
 
-            @comment.Comment.Content
+
+            <span style="white-space: pre-line">@comment.Comment.Content</span>
         </div>
     </div>
 }

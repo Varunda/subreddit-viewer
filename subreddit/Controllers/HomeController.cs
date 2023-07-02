@@ -89,13 +89,13 @@ namespace subreddit.Controllers {
                     } else if (v.Comment.ParentID.StartsWith("t1_")) {
                         string parentID = v.Comment.ParentID[3..];
                         if (cmts.TryGetValue(parentID, out ViewComment? parent) == false) {
-                            _Logger.LogError($"missing comment {parentID}");
+                            _Logger.LogError($"missing comment {parentID} while loading post {id}");
                             continue;
                         }
 
                         CommentTree? parentNode = head.GetChild(parentID);
                         if (parentNode == null) {
-                            _Logger.LogError($"missing comment tree node {parentID}");
+                            _Logger.LogError($"missing comment tree node {parentID} while loading post {id}");
                             continue;
                         }
 
@@ -121,6 +121,16 @@ namespace subreddit.Controllers {
             model.Comments = list.Skip(1).ToList();
 
             return View(model);
+        }
+
+        public IActionResult Link(string l) {
+            string? postID = subreddit.Code.LinkParser.GetPostID(l);
+
+            if (postID == null) {
+                return BadRequest($"failed to parse '{l}' to a valid post ID");
+            }
+
+            return RedirectToAction("Post", new { id = postID });
         }
 
     }

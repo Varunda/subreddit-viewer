@@ -67,6 +67,8 @@ namespace subreddit.Services.Db {
                 cmd.AddParameter($"@Term{i}", terms[i]);
             }
 
+            _Logger.LogDebug(cmd.Print());
+
             List<SearchResult> results = await cmd.ExecuteReadList(_Reader, cancel);
 
             return results;
