@@ -7,8 +7,10 @@
 </div>
 
 <form asp-controller="Home" asp-action="Search" method="get" class="mb-2">
-    <input class="form-control" name="q" type="text" placeholder="Search for posts, limited to 1k results" value="@Model.Query" />
-    <input type="submit" class="form-control btn btn-primary" value="Search" />
+    <div class="input-group">
+        <input class="form-control" name="q" type="text" placeholder="Search for posts, limited to 1k results" value="@Model.Query" />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
 </form>
 
 <div class="border-bottom mb-2">

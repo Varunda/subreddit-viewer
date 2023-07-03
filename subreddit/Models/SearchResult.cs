@@ -1,5 +1,8 @@
 ﻿namespace subreddit.Models {
 
+    /// <summary>
+    ///     Represents the results of a search
+    /// </summary>
     public class SearchResult {
 
         /// <summary>
@@ -37,6 +40,9 @@
         /// </summary>
         public string Content { get; set; } = "";
 
+        /// <summary>
+        ///     The score of the submission/comment
+        /// </summary>
         public int Score { get; set; }
 
     }

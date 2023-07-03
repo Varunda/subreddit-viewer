@@ -45,7 +45,7 @@ namespace subreddit.Controllers {
             try {
                 List<string> terms = QueryParser.Parse(q);
 
-                List<SearchResult> results = await _SearchDb.Search(terms, o, CancellationToken.None);
+                List<SearchResult> results = await _SearchDb.GetByTerms(terms, o, CancellationToken.None);
 
                 ViewSearchResults model = new();
                 model.Query = q;
@@ -57,6 +57,28 @@ namespace subreddit.Controllers {
             } catch (Exception ex) {
                 _Logger.LogError(ex, $"exception in query for '{q}'");
                 return StatusCode(500, $"Exception while querying '{q}': {ex.Message}");
+            }
+        }
+
+        public async Task<IActionResult> Author([FromQuery] string u) {
+            if (string.IsNullOrEmpty(u)) {
+                return BadRequest("no user provided");
+            }
+
+            _Logger.LogInformation($"getting submissions//comments from {u}");
+
+            try {
+                List<SearchResult> results = await _SearchDb.GetByAuthor(u, CancellationToken.None);
+
+                ViewSearchResults model = new();
+                model.Query = $"user:{u}";
+                model.Results = results;
+                model.Offset = 0;
+
+                return View("Search", model);
+            } catch (Exception ex) {
+                _Logger.LogError(ex, $"exception while getting content for {u}");
+                return StatusCode(500, $"Exception while getting content for {u}: {ex.Message}");
             }
         }
 

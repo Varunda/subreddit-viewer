@@ -2,29 +2,50 @@
 
 @model CommentTree
 
-<div>
-    <div style="padding-left: 1rem; border-left: 1px solid #dee2e6;">
-        <strong>
-            @Model.Root.Comment.Score 
-            -
-            <span>
-                @Model.Root.Comment.Author
-            </span>
-        </strong>
-        <span>
-            -
+<div id="comment-@(Model.Root.Comment.ID)" style="padding-left: 1rem;" class="@(Model.Root.Depth != 0 ? "border-start" : "")" >
+    <div>
+        <span style="color: var(--bs-blue)">
+            <button class="btn p-0" style="margin-top: -0.25rem;" type="button" data-bs-toggle="collapse" data-bs-target=".comment-@(Model.Root.Comment.ID)-children">
+                [-]
+            </button>
+
+            @Model.Root.Comment.Author
         </span>
-        <span>
+
+        <strong>
+            <strong>
+                @Model.Root.Comment.Score 
+            </strong>
+        </strong>
+
+        <span class="text-muted">
             @Model.Root.Comment.PostedAt.ToString("u")
             UTC
         </span>
 
-        <br/>
+        <br />
 
         <span style="white-space: pre-line">@Model.Root.Comment.Content</span>
 
-        @foreach (CommentTree child in Model.GetChildren()) {
-            <partial name="_Comment" model=child/>
+        @* this one is shown by default, when toggled, the child count will show *@
+        <div class="collapse show comment-@(Model.Root.Comment.ID)-children">
+            @foreach (CommentTree child in Model.GetChildren()) {
+                <partial name="_Comment" model=child/>
+            }
+        </div>
+
+        @* this one is hidden by default, when toggled, the child comments will collapse *@
+        <div class="collapse comment-@(Model.Root.Comment.ID)-children">
+            <small class="text-muted border-start" style="padding-left: 1rem;">
+                @(Model.Count() - 1) child comments hidden
+            </small>
+        </div>
+
+        @if (Model.Root.Depth == 0) {
+            <div>
+                <br/>
+            </div>
         }
+
     </div>
 </div>

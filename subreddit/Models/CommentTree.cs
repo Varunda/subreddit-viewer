@@ -10,6 +10,9 @@
             return Children;
         }
 
+        /// <summary>
+        ///     Get how many comments are within this tree
+        /// </summary>
         public int Count() {
             int count = 1;
 
@@ -20,6 +23,10 @@
             return count;
         }
 
+        /// <summary>
+        ///     Add a new node to this tree. Will sort the tree based on when the comment was posted
+        /// </summary>
+        /// <param name="tree"></param>
         public void AddChild(CommentTree tree) {
             this.Children.Add(tree);
             this.Children.Sort((a, b) => {

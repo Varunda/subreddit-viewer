@@ -13,6 +13,16 @@ namespace subreddit.Services.Db {
             _Configuration = configuration;
         }
 
+        /// <summary>
+        ///     Create a new <see cref="NpgsqlCommand"/> using a <see cref="NpgsqlConnection"/>
+        /// </summary>
+        /// <param name="conn">Connection to create the command on. The connection is opened</param>
+        /// <param name="text">Text of the command</param>
+        /// <returns>
+        ///     A new <see cref="NpgsqlCommand"/> with
+        ///     <see cref="NpgsqlCommand.CommandType"/>of <see cref="CommandType.Text"/>
+        ///     and <see cref="NpgsqlCommand.CommandText"/> of <paramref name="text"/>
+        /// </returns>
         public async Task<NpgsqlCommand> Command(NpgsqlConnection conn, string text) {
             await conn.OpenAsync();
 
@@ -23,6 +33,13 @@ namespace subreddit.Services.Db {
             return cmd;
         }
 
+        /// <summary>
+        ///     Get a connection to the DB
+        /// </summary>
+        /// <returns>
+        ///     An unopened connection to the DB
+        /// </returns>
+        /// <exception cref="Exception">If no connection string for the DB was given</exception>
         public NpgsqlConnection Connection() {
             IConfigurationSection allStrings = _Configuration.GetSection("ConnectionStrings");
             string? connStr = allStrings["db"];

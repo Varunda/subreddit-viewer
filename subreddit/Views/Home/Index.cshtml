@@ -5,24 +5,27 @@
     <meta property="og:description" content="Search archived posts and view old links that you cannot view anymore" />
 }
 
-<div class="text-center">
-    <h1 class="display-1">
+<div>
+    <h1 class="display-1 text-center">
         /r/Planetside archive viewer
     </h1>
 
-    <p>
+    <p class="text-center">
         This data was pulled from <a href="https://reddit-top20k.cworld.ai/">https://reddit-top20k.cworld.ai/</a>
     </p>
 
-    <p>
+    <p class="text-center">
         Data is from the start of the subreddit until the end of 2022
     </p>
 
     <div>
         <h2>Search</h2>
+        <text>Search for terms over all posts and comments</text>
         <form asp-controller="Home" asp-action="Search" method="get">
-            <input class="form-control" name="q" type="text" placeholder="Search for posts, limited to 1k results" />
-            <input type="submit" class="form-control btn btn-primary" value="Search" />
+            <div class="input-group">
+                <input class="form-control" name="q" type="text" placeholder="Search for posts, limited to 1k results" />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
         </form>
     </div>
 
@@ -30,11 +33,31 @@
 
     <div>
         <h2>View link</h2>
+        <text>View a specific reddit link</text>
         <form asp-controller="Home" asp-action="Link">
-            <input class="form-control" name="l" type="text" placeholder="Put in URLs here, such as: https://old.reddit.com/r/Planetside/comments/ezmqm3/some_cool_stuff_were_going_to_be_seeing_in/" />
-            <input type="submit" class="form-control btn btn-primary" value="Find post" />
+            <div class="input-group">
+                <input class="form-control" name="l" type="text" placeholder="Put in URLs here, such as: https://old.reddit.com/r/Planetside/comments/ezmqm3/some_cool_stuff_were_going_to_be_seeing_in/" />
+                <button type="submit" class="btn btn-primary">Load</button>
+            </div>
         </form>
     </div>
+
+    <hr class="border" />
+
+    <div>
+        <h2>View user</h2>
+        <text>View the submissions and comments of a specific user</text>
+        <form asp-controller="Home" asp-action="Author" method="get">
+            <div class="input-group">
+                <span class="input-group-text">
+                    /u/
+                </span>
+                <input class="form-control" name="u" type="text" placeholder="Do not include the leading /u/!" />
+                <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+        </form>
+    </div>
+
 
 
 </div>
