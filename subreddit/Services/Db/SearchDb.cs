@@ -78,6 +78,7 @@ namespace subreddit.Services.Db {
             }));
 
             cmd.CommandText = string.Format(cmd.CommandText, submissionSearch, commentSearch, offset);
+            cmd.CommandTimeout = 120;
 
             for (int i = 0; i < terms.Count; ++i) {
                 cmd.AddParameter($"@Term{i}", terms[i]);
@@ -111,6 +112,7 @@ namespace subreddit.Services.Db {
                 WHERE lower(c.author) = @Author
                 ORDER BY 4 ASC;
             ");
+            cmd.CommandTimeout = 120;
 
             cmd.AddParameter("Author", author);
 

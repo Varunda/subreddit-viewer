@@ -9,6 +9,8 @@ Extract the .zst files using https://github.com/facebook/zstd/releases
 
 ### Create the tables
 
+The database instance is Postgres 14. Other versions probably work as the features used are pretty basic
+
 ```sql
 CREATE TABLE IF NOT EXISTS submissions (
 	id varchar NOT NULL PRIMARY KEY,

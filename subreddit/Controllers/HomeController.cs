@@ -41,7 +41,7 @@ namespace subreddit.Controllers {
                 return BadRequest("cannot have a negative offset");
             }
 
-            _Logger.LogInformation($"searching for '{q}'");
+            _Logger.LogInformation($"searching for '{q}' offset {o}");
             try {
                 List<string> terms = QueryParser.Parse(q);
 
@@ -71,7 +71,7 @@ namespace subreddit.Controllers {
                 List<SearchResult> results = await _SearchDb.GetByAuthor(u, CancellationToken.None);
 
                 ViewSearchResults model = new();
-                model.Query = $"user:{u}";
+                model.Query = $"";
                 model.Results = results;
                 model.Offset = 0;
 
@@ -83,8 +83,8 @@ namespace subreddit.Controllers {
         }
 
         public async Task<IActionResult> Post(string id) {
-            _Logger.LogInformation($"View post {id}");
             RedditPost? post = await _PostDb.GetByID(id);
+            _Logger.LogInformation($"View post {id}: {post?.Title}");
 
             if (post == null) {
                 return NotFound($"Failed to find reddit post {id}");
@@ -105,6 +105,7 @@ namespace subreddit.Controllers {
 
             CommentTree head = new();
 
+            // create the comment tree
             while (failsafeBreak-- > 0) {
                 bool needsReiter = false;
 
