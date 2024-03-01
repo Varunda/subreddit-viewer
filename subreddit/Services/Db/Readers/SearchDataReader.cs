@@ -24,6 +24,7 @@ namespace subreddit.Services.Db {
             r.PostedAt = reader.GetDateTime("posted_at");
             r.Author = reader.GetString("author");
             r.Score = reader.GetInt32("score");
+            r.AuthorFlair = reader.IsDBNull("author_flair") ? null : reader.GetString("author_flair");
 
             return r;
         }

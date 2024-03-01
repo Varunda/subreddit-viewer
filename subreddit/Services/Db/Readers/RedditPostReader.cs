@@ -15,6 +15,7 @@ namespace subreddit.Services.Db.Readers {
             post.Author = reader.GetString("author");
             post.Content = reader.GetString("content");
             post.Score = reader.GetInt32("score");
+            post.AuthorFlair = reader.IsDBNull("author_flair") ? null : reader.GetString("author_flair");
 
             return post;
         }

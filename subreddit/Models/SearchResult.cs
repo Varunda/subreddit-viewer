@@ -45,5 +45,10 @@
         /// </summary>
         public int Score { get; set; }
 
+        /// <summary>
+        ///     flair of the post
+        /// </summary>
+        public string? AuthorFlair { get; set; }
+
     }
 }

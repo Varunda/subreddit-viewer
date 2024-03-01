@@ -26,6 +26,11 @@
         public string Author { get; set; } = "";
 
         /// <summary>
+        ///     flair of the poster
+        /// </summary>
+        public string? AuthorFlair { get; set; }
+
+        /// <summary>
         ///     Content of the post itself
         /// </summary>
         public string Content { get; set; } = "";

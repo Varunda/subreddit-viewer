@@ -18,6 +18,11 @@
 </h1>
 <h5>
     by
+
+    @if (Model.Post.AuthorFlair != null) {
+        <span style="color: var(--bs-white); background-color: var(--bs-gray);" class="mx-0">@Model.Post.AuthorFlair</span>
+    }
+
     <strong>
         @Model.Post.Author
     </strong>

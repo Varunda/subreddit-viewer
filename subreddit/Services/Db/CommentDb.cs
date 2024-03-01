@@ -33,7 +33,7 @@ namespace subreddit.Services.Db {
 
             using NpgsqlConnection conn = _DbHelper.Connection();
             using NpgsqlCommand cmd = await _DbHelper.Command(conn, @"
-                SELECT *, CAST(data->>'score' AS INT) as score
+                SELECT *, CAST(data->>'score' AS INT) as score, data->>'author_flair_text' AS author_flair
                     FROM comments
                     WHERE link_id = @LinkID;
             ");

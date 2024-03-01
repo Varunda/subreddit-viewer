@@ -32,6 +32,11 @@
         public string Author { get; set; } = "";
 
         /// <summary>
+        ///     flair text of the author
+        /// </summary>
+        public string? AuthorFlair { get; set; }
+
+        /// <summary>
         ///     Content of the comment itself. 0 formatting is done here
         /// </summary>
         public string Content { get; set; } = "";

@@ -9,6 +9,10 @@
                 [-]
             </button>
 
+            @if (Model.Root.Comment.AuthorFlair != null) {
+                <span style="color: var(--bs-white); background-color: var(--bs-gray);" class="mx-0">@Model.Root.Comment.AuthorFlair</span>
+            }
+
             @Model.Root.Comment.Author
         </span>
 

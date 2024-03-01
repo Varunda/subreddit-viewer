@@ -50,7 +50,7 @@ namespace subreddit.Services.Db {
             using NpgsqlConnection conn = _DbHelper.Connection();
             using NpgsqlCommand cmd = await _DbHelper.Command(conn, @"
                 SELECT
-                    id AS post_id, id, title, posted_at, content, 'post' AS type, author, CAST(data->>'score' AS int) AS score
+                    id AS post_id, id, title, posted_at, content, 'post' AS type, author, CAST(data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
                 FROM
                     submissions 
                 WHERE (
@@ -58,7 +58,7 @@ namespace subreddit.Services.Db {
                 )
                 UNION ALL
                 SELECT
-                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score
+                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
                 FROM
                     comments c
                     LEFT JOIN submissions s ON ('t3_' || s.id) = c.link_id
@@ -91,6 +91,26 @@ namespace subreddit.Services.Db {
             return results;
         }
 
+        public async Task<List<SearchResult>> GetTop(int offset, int limit, CancellationToken cancel) {
+
+            _Logger.LogInformation($"getting {limit} entries offset by {offset}");
+
+            using NpgsqlConnection conn = _DbHelper.Connection();
+            using NpgsqlCommand cmd = await _DbHelper.Command(conn, @$"
+                SELECT
+                    id AS post_id, id, title, posted_at, content, 'post' AS type, author, CAST(data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
+                FROM
+                    submissions 
+                ORDER BY 8 desc
+                LIMIT {limit} OFFSET {offset}
+            ");
+            cmd.CommandTimeout = 120;
+
+            List<SearchResult> results = await cmd.ExecuteReadList(_Reader, cancel);
+
+            return results;
+        }
+
         public async Task<List<SearchResult>> GetByAuthor(string author, CancellationToken cancel) {
             author = author.ToLower();
 
@@ -99,13 +119,13 @@ namespace subreddit.Services.Db {
             using NpgsqlConnection conn = _DbHelper.Connection();
             using NpgsqlCommand cmd = await _DbHelper.Command(conn, @"
                 SELECT
-                    id AS post_id, id, title, posted_at, content, 'post' AS type, author, CAST(data->>'score' AS int) AS score
+                    id AS post_id, id, title, posted_at, content, 'post' AS type, author, CAST(data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
                 FROM
                     submissions 
                 WHERE lower(author) = @Author
                 UNION ALL
                 SELECT
-                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score
+                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
                 FROM
                     comments c
                     LEFT JOIN submissions s ON ('t3_' || s.id) = c.link_id

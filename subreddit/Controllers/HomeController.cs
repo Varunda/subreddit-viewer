@@ -82,6 +82,30 @@ namespace subreddit.Controllers {
             }
         }
 
+        public async Task<IActionResult> Top([FromQuery] int o = 0, [FromQuery] int l = 200) {
+            if (o < 0) {
+                return BadRequest("offset cannot be less than 0");
+            }
+
+            if (l > 500) {
+                return BadRequest($"limit cannot be more than 500");
+            }
+
+            try {
+                List<SearchResult> results = await _SearchDb.GetTop(o, l, CancellationToken.None);
+
+                ViewSearchResults model = new();
+                model.Query = $"";
+                model.Results = results;
+                model.Offset = o;
+
+                return View("Search", model);
+            } catch (Exception ex) {
+                _Logger.LogError(ex, $"exception while getting top [offset={o}] [limit={l}]");
+                return StatusCode(500, $"Exception while getting top: {ex.Message}");
+            }
+        }
+
         public async Task<IActionResult> Post(string id) {
             RedditPost? post = await _PostDb.GetByID(id);
             _Logger.LogInformation($"View post {id}: {post?.Title}");
