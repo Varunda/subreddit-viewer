@@ -58,7 +58,7 @@ namespace subreddit.Services.Db {
                 )
                 UNION ALL
                 SELECT
-                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
+                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score, c.data->>'author_flair_text' AS author_flair
                 FROM
                     comments c
                     LEFT JOIN submissions s ON ('t3_' || s.id) = c.link_id
@@ -125,7 +125,7 @@ namespace subreddit.Services.Db {
                 WHERE lower(author) = @Author
                 UNION ALL
                 SELECT
-                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score, data->>'author_flair_text' AS author_flair
+                    c.link_id AS post_id, c.id, COALESCE(s.title, ''), COALESCE(s.posted_at, c.posted_at), c.content, 'comment' AS type, c.author, CAST(c.data->>'score' AS int) AS score, c.data->>'author_flair_text' AS author_flair
                 FROM
                     comments c
                     LEFT JOIN submissions s ON ('t3_' || s.id) = c.link_id
