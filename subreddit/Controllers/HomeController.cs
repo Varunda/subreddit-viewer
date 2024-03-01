@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using subreddit.Code;
 using subreddit.Models;
 using subreddit.Services.Db;
@@ -12,18 +13,24 @@ namespace subreddit.Controllers {
         private readonly PostDb _PostDb;
         private readonly CommentDb _CommentDb;
 
-        public HomeController(ILogger<HomeController> logger,
+        private readonly IOptions<SiteConfig> _Config;
+
+        public HomeController(ILogger<HomeController> logger, IOptions<SiteConfig> config,
             SearchDb searchDb, PostDb postDb, CommentDb commentDb) {
 
             _Logger = logger;
+            _Config = config;
 
             _SearchDb = searchDb;
             _PostDb = postDb;
             _CommentDb = commentDb;
+
+            _Logger.LogInformation($"subreddit: {_Config.Value.Subreddit}");
         }
 
         public IActionResult Index() {
-            return View();
+            _Logger.LogInformation($"subreddit: {_Config.Value.Subreddit}");
+            return View(_Config.Value);
         }
 
         /// <summary>

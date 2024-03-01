@@ -14,6 +14,7 @@ builder.Logging.AddConsole(options => options.FormatterName = "ALogger")
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<SiteConfig>(builder.Configuration.GetSection("SiteConfig"));
 builder.Services.AddSingleton<IDbHelper, DbHelper>();
 builder.Services.AddSingleton<IDataReader<SearchResult>, SearchDataReader>();
 builder.Services.AddSingleton<IDataReader<RedditPost>, RedditPostReader>();

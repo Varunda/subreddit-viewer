@@ -1,13 +1,16 @@
-﻿
+﻿@using subreddit.Models
+
+@model SiteConfig
+
 @section metatags {
-    <meta property="og:title" content="r/Planetside archive viewer" />
+    <meta property="og:title" content="/r/@(Model.Subreddit) archive viewer" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="Search archived posts and view old links that you cannot view anymore" />
 }
 
 <div>
     <h1 class="display-1 text-center">
-        /r/Planetside archive viewer
+        /r/@(Model.Subreddit) archive viewer
     </h1>
 
     <p class="text-center">
